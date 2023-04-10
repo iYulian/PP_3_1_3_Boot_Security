@@ -40,12 +40,12 @@ public class UserDaoHibernateIml implements UserDaoHibernate {
             });
         }
 
-        if (!a.get() || !authority1.isEmpty()) {
-            user.userAddAuthority(userRole);
+        if (!(a.get() & authority1.isEmpty())) {
+            user.userAddAuthority(authority1);
         }
 
-        if (!b.get() || !authority2.isEmpty()) {
-            user.userAddAuthority(adminRole);
+        if (!(b.get() & authority2.isEmpty())) {
+            user.userAddAuthority(authority2);
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getUserPassword()));
