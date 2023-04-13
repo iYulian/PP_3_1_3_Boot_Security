@@ -25,27 +25,20 @@ public class UserDaoHibernateIml implements UserDaoHibernate {
     @Override
     public void saveUser(User user, String authority1, String authority2) {
 
-        AtomicBoolean a = new AtomicBoolean(true);
-        AtomicBoolean b = new AtomicBoolean(true);
-
-        if (user.getId() != 0) {
-            getUserById(user.getId()).getAuthorities().forEach(x -> {
-
-                if (x.getAuthority().equals(userRole)) {
-                    a.set(false);
-                }
-                if (x.getAuthority().equals(adminRole)) {
-                    b.set(false);
-                }
-            });
-        }
-
-        if (!(a.get() & authority1.isEmpty())) {
+        if (!authority1.isEmpty()) {
             user.userAddAuthority(authority1);
         }
 
-        if (!(b.get() & authority2.isEmpty())) {
+        if (!authority2.isEmpty()) {
             user.userAddAuthority(authority2);
+        }
+
+        if (user.getId() != 0) {
+            if (user.getRoles().equals(getUserById(user.getId()).getRoles()) ||
+                    user.getRoles().size() < getUserById(user.getId()).getRoles().size()) {
+                user.setRoles(getUserById(user.getId()).getRoles());
+            }
+            user.userAddAuthority(getUserById(user.getId()).getRoles());
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getUserPassword()));

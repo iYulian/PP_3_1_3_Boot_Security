@@ -52,8 +52,8 @@ public class User implements UserDetails, Serializable {
         Role role = new Role(stringRole);
         authority.add(role);
     }
-    public void userAddAuthority(Role role) {
-        authority.add(role);
+    public void userAddAuthority(Set<Role> role) {
+        authority.addAll(role);
     }
 
     public Set<Role> getRoles() {
